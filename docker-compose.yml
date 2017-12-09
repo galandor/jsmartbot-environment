@@ -1,0 +1,36 @@
+version: '2'
+
+services:
+  #enviroment
+   postgresql:
+    image : postgres:${POSTGRESL_VERSION}
+    hostname: postgresql-jsmartbot
+    container_name: postgresql-jsmartbot
+    restart: unless-stopped
+    ports:
+     - 5432
+    environment:
+     - POSTGRES_PASSWORD=postgresqlPassword
+    volumes :
+     - ./postgresql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+     - postgresql_jsmartbot_data_dir:/var/lib/postgresql/data
+    networks:
+     test:
+      ipv4_address: 172.11.239.11
+
+volumes:
+  #enviroment
+  postgresql_jsmartbot_data_dir:
+
+
+networks:
+  test:
+    driver: bridge
+#    driver_opts:
+#      com.docker.network.enable_ipv6: "true"
+#      com.docker.network.bridge.enable_ip_masquerade: "false"
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.11.239.0/24
+        gateway: 172.11.239.1
